@@ -33,18 +33,18 @@ document.getElementById('update-artisan-form').addEventListener('submit', async 
     // Create a JSON object for form data
     const data = {
         skills: document.getElementById('skills').value.split(',').map(skill => skill.trim()),
-        experience: [
-            {
-                id: formatAsUUID(), //(document.getElementById('experience-id').value),
-                project_title: document.getElementById('experience-title').value,
-                description: document.getElementById('experience-description').value,
-                files: []
-            }
-        ]
+        // experience: [
+        //     {
+        //         id: formatAsUUID(), //(document.getElementById('experience-id').value),
+        //         project_title: document.getElementById('experience-title').value,
+        //         description: document.getElementById('experience-description').value,
+        //         files: []
+        //     }
+        // ]
     };
 
     // Get the files and convert them to Base64
-    const experienceFiles = document.getElementById('experience-files').files;
+    const experienceFiles = document.getElementById('image').files;
     const filePromises = [];
 
     for (let i = 0; i < experienceFiles.length; i++) {
@@ -67,24 +67,23 @@ document.getElementById('update-artisan-form').addEventListener('submit', async 
 
     try {
         const filesData = await Promise.all(filePromises);
-        data.experience[0].files = filesData;
+        data.image = filesData || null;
 
         // Log the JSON payload
         console.log('JSON payload:', JSON.stringify(data));
 
         // Send the JSON data with Axios
-        const response = await axios.patch(`${config.apiUrl}artisans/update-me/`, data, {
+        const response = await axios.patch(`${config.apiUrl}auth/user-profile/update-me/`, data, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${config.authToken}` // Use the auth token from config
             }
         });
 
-        // console.log('Artisan updated successfully:', response.data);
-        console.log('Artisan updated successfully:', response.data['experience']);
+        console.log('Artisan updated successfully:', response.data);
     } catch (error) {
         if (error.response) {
-            console.log('Error updating artisan:', error.response.data['experience']);
+            console.log('Error updating artisan:', error.response.data);
             console.error('Error updating artisan:', error.response.data);
         } else {
             console.log('Error updating artisan:', error.message);
