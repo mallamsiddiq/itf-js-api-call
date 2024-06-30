@@ -1,4 +1,4 @@
-function formatAsUUID(str='fc3a5f9c-8883-4699-a7da-d58eb8bfbd16') {
+function formatAsUUID(str='4a0c46fb-9a09-4129-b5d4-6e54e0776d98') {
     // Define a regex pattern for UUID
     const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -36,6 +36,7 @@ document.getElementById('update-artisan-form').addEventListener('submit', async 
         experience: [
             {
                 id: formatAsUUID(), //(document.getElementById('experience-id').value),
+                delete_data: false,
                 project_title: document.getElementById('experience-title').value,
                 description: document.getElementById('experience-description').value,
                 files: []
@@ -84,8 +85,8 @@ document.getElementById('update-artisan-form').addEventListener('submit', async 
         console.log('Artisan updated successfully:', response.data['experience']);
     } catch (error) {
         if (error.response) {
-            console.log('Error updating artisan:', error.response.data['experience']);
-            console.error('Error updating artisan:', error.response.data);
+            console.log('Error updating artisan:', error.response);
+            console.error('Error updating artisan:', error.response);
         } else {
             console.log('Error updating artisan:', error.message);
             console.error('Error updating artisan:', error.message);
