@@ -1,6 +1,15 @@
 document.getElementById('update-artisan-form').addEventListener('submit', async function (event) {
     event.preventDefault();
 
+    // Extract artisan ID from query string
+    const urlParams = new URLSearchParams(window.location.search);
+    const artisanId = urlParams.get('artisan_id');
+
+    if (!artisanId) {
+        console.error('Artisan ID not found in URL');
+        return;
+    }
+
     // Create a JSON object for form data
     const data = {
         skills: document.getElementById('skills').value.split(',').map(skill => skill.trim()),
@@ -14,11 +23,13 @@ document.getElementById('update-artisan-form').addEventListener('submit', async 
         ]
     };
 
-    let id = formatAsUUID((document.getElementById('experience-id').value))
+    const id = formatAsUUID(document.getElementById('experience-id').value);
 
-    if (id != null){
-        data["experience"][0].id = id;
-        console.log(id, id, id)
+    if (id) {
+        data.experience[0].id = id;
+        console.log('Formatted UUID:', id);
+    } else {
+        console.log('Invalid UUID:', id);
     }
 
     // Check if file input exists
@@ -40,21 +51,18 @@ document.getElementById('update-artisan-form').addEventListener('submit', async 
         console.log('JSON payload:', JSON.stringify(data));
 
         // Send the JSON data with Axios
-        const response = await axios.patch(`${config.apiUrl}artisans/update-me/`, data, {
+        const response = await axios.patch(`${config.apiUrl}artisans/${artisanId}/`, data, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${config.authToken}` // Use the auth token from config
             }
         });
 
-        // console.log('Artisan updated successfully:', response.data);
-        console.log('Artisan updated successfully:', response.data['experience']);
+        console.log('Artisan updated successfully:', response.data.experience);
     } catch (error) {
         if (error.response) {
-            console.log('Error updating artisan:', error.response);
             console.error('Error updating artisan:', error.response);
         } else {
-            console.log('Error updating artisan:', error.message);
             console.error('Error updating artisan:', error.message);
         }
     }
@@ -74,4 +82,4 @@ document.getElementById('update-artisan-form').addEventListener('submit', async 
                 form.classList.add('was-validated')
             }, false)
         })
-})()
+})();
