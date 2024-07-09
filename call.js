@@ -1,4 +1,4 @@
-function formatAsUUID(str='4a0c46fb-9a09-4129-b5d4-6e54e0776d98') {
+function formatAsUUID(str='467e3957-be4d-4a3d-a897-6a904b021c8c') {
     // Define a regex pattern for UUID
     const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -35,7 +35,7 @@ document.getElementById('update-artisan-form').addEventListener('submit', async 
         skills: document.getElementById('skills').value.split(',').map(skill => skill.trim()),
         experience: [
             {
-                id: formatAsUUID(), //(document.getElementById('experience-id').value),
+                // id: formatAsUUID((document.getElementById('experience-id').value)),
                 delete_data: false,
                 project_title: document.getElementById('experience-title').value,
                 description: document.getElementById('experience-description').value,
@@ -43,6 +43,15 @@ document.getElementById('update-artisan-form').addEventListener('submit', async 
             }
         ]
     };
+
+    let id = formatAsUUID((document.getElementById('experience-id').value))
+
+    if (id != null){
+        data["experience"][0].id = id;
+        console.log(id, id, id)
+    }
+
+    console.log(id, id)
 
     // Get the files and convert them to Base64
     const experienceFiles = document.getElementById('experience-files').files;
